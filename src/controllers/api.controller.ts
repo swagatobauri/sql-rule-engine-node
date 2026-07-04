@@ -149,6 +149,12 @@ export const evaluateQueryController = async (req: Request, res: Response): Prom
 
     const { sql, schema_name, problem_id } = validation.data;
 
+    const problem = getProblemById(problem_id);
+    if (!problem) {
+      ApiError(res, `Problem '${problem_id}' not found`, 404);
+      return;
+    }
+
     const userId = (req as AuthenticatedRequest).user?.userId;
     if (!userId) {
       ApiError(res, "User is not authenticated", 401, undefined, "UNAUTHENTICATED");
